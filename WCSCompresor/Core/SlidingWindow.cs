@@ -9,8 +9,6 @@ namespace WCSCompress.Core
 {
     class SlidingWindow 
     {
-        private Stream _source = null;
-
         private int _maxWindowSize;
         
         private byte[] _tmpWindowBuffer;
@@ -19,13 +17,12 @@ namespace WCSCompress.Core
         private int _WIndexStart;
         private int _WIndexEnd;
 
-        public SlidingWindow(Stream f, int windowSize)
+        public SlidingWindow(int windowSize)
         {
-            _source = f;
             _maxWindowSize = windowSize;
             
             _tmpWindowBuffer = new byte[10 * windowSize];
-            _tmpWindowBufferCount = f.Read(_tmpWindowBuffer,0,_tmpWindowBuffer.Length);
+            _tmpWindowBufferCount = 0;
 
             _WIndexStart = 0;
             _WIndexEnd = -1;
@@ -55,52 +52,36 @@ namespace WCSCompress.Core
             return _tmpWindowBuffer[_WIndexStart+index];
         }
 
-        public byte GetByte()
+        public void AddByte(byte data)
         {
-            return _tmpWindowBuffer[_WIndexEnd+1];
-        }
-
-        
-        public void MoveWindow()
-        {
-            if (_WIndexEnd >= (_tmpWindowBufferCount))
-                throw new IndexOutOfRangeException();
-
             if (GetCurrWindowSize() < _maxWindowSize)
-                _WIndexEnd++;
+                _tmpWindowBuffer[++_WIndexEnd] = data;
             else
             {
-                _WIndexEnd++;
+                _tmpWindowBuffer[++_WIndexEnd] = data;
                 _WIndexStart++;
             }
 
-            if(_WIndexEnd == _tmpWindowBuffer.Length-1)
+            if (_WIndexEnd == _tmpWindowBuffer.Length - 1)
             {
                 // move index window at end shift data and read next bytes
-                for(int i = _WIndexStart, s = 0;i <= _WIndexEnd;i++,s++)
+                for (int i = _WIndexStart, s = 0; i <= _WIndexEnd; i++, s++)
                 {
                     _tmpWindowBuffer[s] = _tmpWindowBuffer[i];
                 }
 
-                int tmpLen = _WIndexStart-0;
+                int tmpLen = _WIndexStart - 0;
                 _WIndexStart -= tmpLen;
                 _WIndexEnd -= tmpLen;
 
                 _tmpWindowBufferCount = _WIndexEnd + 1;
-
-                // read next bytes
-                _tmpWindowBufferCount += _source.Read(_tmpWindowBuffer, _tmpWindowBufferCount, _tmpWindowBuffer.Length - _tmpWindowBufferCount);
             }
+
         }
 
-        public bool HasByteToRead()
+       public bool IsMaxSizeWindow()
         {
-            return _WIndexEnd + 1 < _tmpWindowBufferCount;
-        }
-
-        public bool WillWindowMove()
-        {
-            return GetCurrWindowSize() < _maxWindowSize;
+            return GetCurrWindowSize() == _maxWindowSize;
         }
     }
 }

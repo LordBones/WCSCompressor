@@ -21,32 +21,40 @@ namespace WCSCompresor
 
 
 
-            SlidingWindow sw = new SlidingWindow(new MemoryStream(input), 8);
+            
+            SlidingWindow sw = new SlidingWindow( 8);
             LookupPredictor lp = new LookupPredictor();
 
             string output = null;
 
             using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream msInput = new MemoryStream(input))
             {
-                while (sw.HasByteToRead())
+                int data = msInput.ReadByte(); 
+
+                while (data > 0)
                 {
-                    if (sw.GetCurrWindowSize() > 0)
+                    byte dataB = (byte)data;
+
+                    if (sw.GetCurrWindowSize() > 1)
                     {
-                        if(!lp.IsSuccAlone(sw.GetWindowLastByte(),sw.GetByte()))
-                            ms.WriteByte(sw.GetByte());
+                        if(!lp.IsSuccAlone(sw.GetWindowLastByte(),dataB))
+                            ms.WriteByte(dataB);
                     }
 
                     // update lookup
                     if(sw.GetCurrWindowSize() > 0)
-                        lp.AddByte(sw.GetWindowLastByte(),sw.GetByte());
+                        lp.AddByte(sw.GetWindowLastByte(),dataB);
 
                     if (sw.GetCurrWindowSize() > 1)
                     {
-                        if (!sw.WillWindowMove())
+                        if (sw.IsMaxSizeWindow())
                             lp.RemoveByte(sw.GetWindowFirstByte(), sw.GetWindowByte(1));
                     }
 
-                    sw.MoveWindow();
+                    sw.AddByte(dataB);
+
+                    data = msInput.ReadByte(); 
                 }
 
                 output = Encoding.UTF8.GetString(ms.ToArray());
