@@ -18,11 +18,12 @@ namespace WCSCompresor
         static void TestSlidingWindow()
         {
             byte[] input = Encoding.UTF8.GetBytes("Ahoj ja jsem testovaci string a doufam ze se spravne prectu.");
-
+            //byte[] input = Encoding.UTF8.GetBytes("jaoifuodjfahdfoodfuludflahjfhadfhjaoidfhoiajdfoaihdfoahdfojhdfahdfoahdfljahfohafalfja");
+                                                    
 
 
             
-            SlidingWindow sw = new SlidingWindow( 8);
+            SlidingWindow sw = new SlidingWindow( 128);
             LookupPredictor lp = new LookupPredictor();
 
             string output = null;
@@ -38,8 +39,13 @@ namespace WCSCompresor
 
                     if (sw.GetCurrWindowSize() > 1)
                     {
-                        if(!lp.IsSuccAlone(sw.GetWindowLastByte(),dataB))
+                        if (!lp.IsDataFollowAncestorOnly(sw.GetWindowLastByte(), dataB))
+                        {
+                            if (lp.IsDataFollowAncestorOnlyFirstBreak(sw.GetWindowLastByte(), dataB))
+                                // write synchron byte which not exist in last context
+                                ms.WriteByte((byte)'#');
                             ms.WriteByte(dataB);
+                        }
                     }
 
                     // update lookup
