@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\CharCountsOrder.cs" />
     <Compile Include="Core\LookupPredictor.cs" />
     <Compile Include="Core\SlidingWindow.cs" />
+    <Compile Include="Core\WCSCompress.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

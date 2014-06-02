@@ -12,6 +12,8 @@ namespace WCSCompress.Core
         int[] _totalCount;
         int [] _DataNotZeroCount;
 
+        int[] _lookupAllUsedBytes = new int[256];
+
         public LookupPredictor()
         {
             _lookup = new int[256][];
@@ -35,6 +37,8 @@ namespace WCSCompress.Core
 
             _lookup[prescedentor][data]++;
             _totalCount[prescedentor]++;
+
+            _lookupAllUsedBytes[data]++;
         }
 
         public void RemoveByte(byte prescedentor, byte data)
@@ -47,11 +51,15 @@ namespace WCSCompress.Core
             _totalCount[prescedentor]--;
             if (_lookup[prescedentor][data] < 0)
                 throw new IndexOutOfRangeException();
+
+            _lookupAllUsedBytes[data]--;
         }
 
         public bool IsDataFollowAncestorOnly(byte prescedentor, byte data)
         {
-            if ( _lookup[prescedentor][data] == _totalCount[prescedentor] && _lookup[prescedentor][data] != 0)
+            if (( _lookup[prescedentor][data] == _totalCount[prescedentor] && _lookup[prescedentor][data] != 0)
+               // || (IsDataMostCountContraOthers(prescedentor, data) )
+                )
                 return true;
             else
                 return false;
@@ -59,7 +67,49 @@ namespace WCSCompress.Core
 
         public bool IsDataFollowAncestorOnlyFirstBreak(byte prescedentor, byte data)
         {
-            return _lookup[prescedentor][data] == 0 && _DataNotZeroCount[prescedentor] == 1;
+            return (_lookup[prescedentor][data] == 0 && _DataNotZeroCount[prescedentor] == 1);
+                //||
+
+                //(!IsDataMostCountContraOthers(prescedentor, data));
+                
+        }
+
+        public int DataFollowAncestorTotalCount(byte prescedentor)
+        {
+            return _totalCount[prescedentor];
+        }
+
+        public byte GetNotUseInWindowByte()
+        {
+            for(int i =0;i<256;i++)
+            {
+                if (_lookupAllUsedBytes[i] == 0)
+                    return (byte)i;
+            }
+
+            throw new Exception("Every time must exist char not in use");
+        }
+
+        public bool IsByteUsed(byte data)
+        {
+            return _lookupAllUsedBytes[data] != 0;
+        }
+
+        public bool IsDataMostCountContraOthers(byte prescedentor, byte data)
+        {
+            if (_totalCount[prescedentor] == 0)
+                return false;
+
+            return ((_lookup[prescedentor][data] * 100) / _totalCount[prescedentor]) > 90;
+        }
+
+        public bool IsDataMostCountContraOthers(byte prescedentor)
+        {
+            if (_totalCount[prescedentor] == 0)
+                return false;
+
+
+            return ((_lookup[prescedentor].Max() * 100) / _totalCount[prescedentor]) > 90;
         }
     }
 }

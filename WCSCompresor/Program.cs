@@ -12,58 +12,57 @@ namespace WCSCompresor
     {
         static void Main(string[] args)
         {
-            TestSlidingWindow();
+            //TestSlidingWindow();
+
+            if (args.Length != 3 && args.Length != 4)
+                return;
+
+            WCSCompressor vcs = new WCSCompressor(); 
+            
+
+            if(args[0] == "-c")
+            {
+                int slidingSize = 128;
+                if(args.Length == 4)
+                    slidingSize = int.Parse(args[3]);
+
+                using(FileStream fsIn = new FileStream(args[1],FileMode.Open, FileAccess.Read))
+                //using (FileStream fsOut = new FileStream("tmp", FileMode.Create, FileAccess.Write))
+                //{
+                //    vcs.Coding(fsIn, fsOut, slidingSize);
+                //    fsOut.Flush();
+                //}
+                //Console.WriteLine(string.Format("C. Removed: {0}   Add: {1}", vcs.StatCharRemove, vcs.StatCharAdd));
+            
+                //vcs = new WCSCompressor();
+                //using (FileStream fsIn = new FileStream("tmp", FileMode.Open, FileAccess.Read))
+                using (FileStream fsOut = new FileStream(args[2], FileMode.Create, FileAccess.Write))
+                {
+                    vcs.Coding(fsIn, fsOut, slidingSize);
+                    fsOut.Flush();
+                }
+
+
+                Console.WriteLine(string.Format("C. Removed: {0}   Add: {1}", vcs.StatCharRemove, vcs.StatCharAdd));
+            }
         }
 
         static void TestSlidingWindow()
         {
             byte[] input = Encoding.UTF8.GetBytes("Ahoj ja jsem testovaci string a doufam ze se spravne prectu.");
             //byte[] input = Encoding.UTF8.GetBytes("jaoifuodjfahdfoodfuludflahjfhadfhjaoidfhoiajdfoaihdfoahdfojhdfahdfoahdfljahfohafalfja");
-                                                    
 
 
+            WCSCompressor vcs = new WCSCompressor(); 
             
-            SlidingWindow sw = new SlidingWindow( 128);
-            LookupPredictor lp = new LookupPredictor();
-
             string output = null;
 
-            using (MemoryStream ms = new MemoryStream())
+            using(MemoryStream msOutput = new MemoryStream())
             using (MemoryStream msInput = new MemoryStream(input))
             {
-                int data = msInput.ReadByte(); 
-
-                while (data > 0)
-                {
-                    byte dataB = (byte)data;
-
-                    if (sw.GetCurrWindowSize() > 1)
-                    {
-                        if (!lp.IsDataFollowAncestorOnly(sw.GetWindowLastByte(), dataB))
-                        {
-                            if (lp.IsDataFollowAncestorOnlyFirstBreak(sw.GetWindowLastByte(), dataB))
-                                // write synchron byte which not exist in last context
-                                ms.WriteByte((byte)'#');
-                            ms.WriteByte(dataB);
-                        }
-                    }
-
-                    // update lookup
-                    if(sw.GetCurrWindowSize() > 0)
-                        lp.AddByte(sw.GetWindowLastByte(),dataB);
-
-                    if (sw.GetCurrWindowSize() > 1)
-                    {
-                        if (sw.IsMaxSizeWindow())
-                            lp.RemoveByte(sw.GetWindowFirstByte(), sw.GetWindowByte(1));
-                    }
-
-                    sw.AddByte(dataB);
-
-                    data = msInput.ReadByte(); 
-                }
-
-                output = Encoding.UTF8.GetString(ms.ToArray());
+                vcs.Coding(msInput,msOutput, 128);
+            
+                output = Encoding.UTF8.GetString(msOutput.ToArray());
             }
 
             Console.ReadKey();
