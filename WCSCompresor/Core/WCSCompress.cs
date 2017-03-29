@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolsLib.AdvanceStructure;
 
 namespace WCSCompress.Core
 {
@@ -17,12 +18,12 @@ namespace WCSCompress.Core
             BufferedStream bfInput = new BufferedStream(input);
 
             SlidingWindow sw = new SlidingWindow(sizeSlidingWindow);
-            LookupPredictor lp = new LookupPredictor();
+            LookupPredictor lp = new LookupPredictor(); ;
             CharCountsOrder ccoGlobal = new CharCountsOrder();
             CharCountsOrder [] cco = new CharCountsOrder[256];
             for (int i = 0; i < cco.Length; i++)
                 cco[i] = new CharCountsOrder();
-
+                
             int data = bfInput.ReadByte();
 
             bool wasLastCharRemove = false;

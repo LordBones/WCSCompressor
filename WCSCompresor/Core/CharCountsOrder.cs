@@ -21,6 +21,8 @@ namespace WCSCompress.Core
         /// </summary>
         public int  [] Cetnost;
 
+        public int tmp = 0;
+
         public int Celk_Cetnost;
 
         public CharCountsOrder()
@@ -52,10 +54,37 @@ namespace WCSCompress.Core
         /// <param name="_char"></param>
         public void Add_Char(byte _char)
         {
-            /// updatuje cetnost
+            //if(tmp == 10)
+            //{
+            //    for(int l = 0;l< this.Cetnost.Length;l++)
+            //    {
+            //        if(this.Cetnost[l] > 0)
+            //        {
+            //            this.Cetnost[l]--;
+            //            this.Celk_Cetnost--;
+            //        }
+            //    }
+            //    tmp = 0;
+            //}
+
+            //tmp++;
+
+            // updatuje cetnost
+            //
+            //if (Chars[_char] == 0)
+            //{
+            //    Cetnost[Chars[_char]]++;
+            //    Celk_Cetnost++;
+            //}
+            //else
+            //{
+            //    Cetnost[Chars[_char]] += 2;
+            //    Celk_Cetnost += 2;
+            //}
+
             Cetnost[Chars[_char]]++;
             Celk_Cetnost++;
-            
+
             byte i = Chars[_char];
             byte pom_stack = Stack[i];
             int pom_cetnost = Cetnost[i];

@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCSCompresor", "WCSCompresor\WCSCompresor.csproj", "{73BE80EB-B4EE-47C0-A0CD-EFFF956D52FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPCCompressLib", "SPCCompressLib\SPCCompressLib.csproj", "{92CFD48F-B4DA-405A-A474-2B1A0DC5631D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsLib", "ToolsLib\ToolsLib.csproj", "{E5BD0FB0-2054-4881-9B1F-80D3D605B5AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{73BE80EB-B4EE-47C0-A0CD-EFFF956D52FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73BE80EB-B4EE-47C0-A0CD-EFFF956D52FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73BE80EB-B4EE-47C0-A0CD-EFFF956D52FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CFD48F-B4DA-405A-A474-2B1A0DC5631D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CFD48F-B4DA-405A-A474-2B1A0DC5631D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CFD48F-B4DA-405A-A474-2B1A0DC5631D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CFD48F-B4DA-405A-A474-2B1A0DC5631D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5BD0FB0-2054-4881-9B1F-80D3D605B5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5BD0FB0-2054-4881-9B1F-80D3D605B5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5BD0FB0-2054-4881-9B1F-80D3D605B5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5BD0FB0-2054-4881-9B1F-80D3D605B5AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

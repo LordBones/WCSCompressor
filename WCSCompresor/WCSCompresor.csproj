@@ -9,32 +9,63 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WCSCompress</RootNamespace>
     <AssemblyName>WCSComp</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>6</LangVersion>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.HashFunction.Core, Version=1.8.2.2, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.HashFunction.Core.1.8.2.2\lib\net45\System.Data.HashFunction.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Interfaces, Version=1.0.0.2, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.HashFunction.Interfaces.1.0.0.2\lib\net45\System.Data.HashFunction.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.xxHash, Version=1.8.2.2, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.HashFunction.xxHash.1.8.2.2\lib\net45\System.Data.HashFunction.xxHash.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,17 +73,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BinaryCounter.cs" />
     <Compile Include="Core\CharCountsOrder.cs" />
+    <Compile Include="Core\ContextDictionary.cs" />
+    <Compile Include="Core\CPCompressor\CPCompress.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\ContextForBorrow.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\Helpers_Context.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\Trie.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\TrieOld.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\TrieStruct.cs" />
+    <Compile Include="Core\CPCompressor\Helpers\TrieStructFast.cs" />
+    <Compile Include="Core\CPCompressor\Modules\CircleContextPredictModule.cs" />
+    <Compile Include="Core\CPCompressor\Modules\ContextPredictorModule.cs" />
+    <Compile Include="Core\CPCompressor\Modules\ContextPredictorModuleTrie.cs" />
+    <Compile Include="Core\CPCompressor\Modules\EmptyModule.cs" />
+    <Compile Include="Core\CPCompressor\Modules\NC_Order1_Smart.cs" />
+    <Compile Include="Core\CPCompressor\Modules\Order1_ByteCounterModule.cs" />
+    <Compile Include="Core\CPCompressor\Predictor.cs" />
+    <Compile Include="Core\CPCompressor\Modules\IPredictorModule.cs" />
+    <Compile Include="Core\CPCompressor\VO\CharProbabilityVO.cs" />
+    <Compile Include="Core\CPCompressor\VO\LastCharPredictorLightVO.cs" />
     <Compile Include="Core\LookupPredictor.cs" />
-    <Compile Include="Core\SlidingWindow.cs" />
     <Compile Include="Core\WCSCompress.cs" />
+    <Compile Include="LzC\Encode.cs" />
+    <Compile Include="LzC\HashSearchSW.cs" />
+    <Compile Include="LzC\LzC.cs" />
+    <Compile Include="MCR\MCR.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortC\SortC.cs" />
+    <Compile Include="TrieTester.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SPCCompressLib\SPCCompressLib.csproj">
+      <Project>{92cfd48f-b4da-405a-a474-2b1a0dc5631d}</Project>
+      <Name>SPCCompressLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsLib\ToolsLib.csproj">
+      <Project>{e5bd0fb0-2054-4881-9b1f-80d3d605b5af}</Project>
+      <Name>ToolsLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
